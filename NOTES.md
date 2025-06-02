@@ -76,3 +76,9 @@ return res.end(fullStreamContent)
 ```
 
 Neste exemplo, usamos um loop `for await` para iterar sobre todos os chunks da stream e forçar a leitura completa da stream antes de continuar.
+
+### Buffer
+
+O Buffer é a representação de um local de memória alocado para armazenar dados. Os dados armazenados em um Buffer tem o formato hexadecimal, e podem ser convertidos para outros formatos, como string, JSON, etc.
+
+Os Buffers são muito utilizados por serem mais eficientes em termos de memória e velocidade, especialmente quando lidamos com grandes volumes de dados ou transmissões de rede.
