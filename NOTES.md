@@ -54,3 +54,25 @@ export class UpperCaseTransform extends Transform {
 ```
 
 4. **Duplex**: Permite ler e escrever dados ao mesmo tempo, como em uma conexão de rede bidirecional, acaba sendo uma junção dos tipos Readable e Writable, porém não é muito comum.
+
+### Consumindo uma Stream Completa
+
+Alguns formatos de dados, como XLS, JSON entre outros não podem ser consumidos de forma parcial, ou seja, não podemos ler um pedaço do arquivo e depois ler outro pedaço, precisamos ler o arquivo completo.
+
+Para isso podemos usar o exemplo abaixo para esperar todos os buffers de uma stream serem lidos, juntá-los e então processar o resultado final.
+
+```js
+const buffers = []
+
+// This for await the entire stream end to continue
+for await (const chunk of req) {
+  buffers.push(chunk)
+}
+
+const fullStreamContent = Buffer.concat(buffers).toString()
+console.log(fullStreamContent)
+
+return res.end(fullStreamContent)
+```
+
+Neste exemplo, usamos um loop `for await` para iterar sobre todos os chunks da stream e forçar a leitura completa da stream antes de continuar.
