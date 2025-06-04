@@ -36,4 +36,13 @@ export class Database {
 
     return data
   }
+
+  delete(entity, id) {
+    const rowIndex = this.#database[entity].findIndex((item) => item.id === id)
+
+    if (rowIndex > -1) {
+      this.#database[entity].splice(rowIndex, 1)
+      this.#persist()
+    }
+  }
 }
