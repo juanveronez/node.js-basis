@@ -1,40 +1,20 @@
 import http from 'node:http'
-import { randomUUID } from 'node:crypto'
 import { json } from './middlewares/json.js'
-import { Database } from './database.js'
-
-const database = new Database()
+import { routes } from './routes.js'
 
 const server = http.createServer(async (req, res) => {
   const { method, url } = req
 
   await json(req, res)
 
-  if (url === '/users' && method === 'GET') {
-    return res.end(JSON.stringify(database.select('users')))
+  const route = routes.find((route) => route.method === method && route.path === url)
+
+  if (route) {
+    return route.handler(req, res)
   }
 
-  if (url === '/users' && method === 'POST') {
-    const { name, email } = req.body
 
-    const user = {
-      id: randomUUID(),
-      name,
-      email,
-    }
-
-    database.insert('users', user)
-
-    return res.writeHead(201).end()
-  }
-
-  if (url === '/users' && method === 'DELETE') {
-    return res.end('Delete user')
-  }
-
-  res
-    .writeHead(404)
-    .end(JSON.stringify({ error: 'resource not found', method, url }))
+  res.writeHead(404).end()
 })
 
 server.listen(3333)
